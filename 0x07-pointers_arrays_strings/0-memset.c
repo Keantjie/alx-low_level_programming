@@ -4,7 +4,8 @@
  * @n: bytes to be filled
  * @s: mamory area
  * @b: the constant byte
- * @Return: return to the pointer location
+ *
+ * Return: return to memory area s
  */
 char *_memset(char *s, char b, unsigned int n)
 {
