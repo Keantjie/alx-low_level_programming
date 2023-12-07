@@ -8,42 +8,44 @@
  */
 dlistint_t *insert_dnodeint_at_index(dlistint_t **h, unsigned int idx, int n)
 {
-	dlistint_t *current_n = NULL, *sub = NULL;
-	unsigned int k = 0;
+	dlistint_t *current_n;
+	dlistint_t *head;
+	unsigned int i;
 
-	current_n = malloc(sizeof(dlistint_t));
-	if (!current_n)
-		return (NULL);
-	current_n->next = NULL;
-	current_n->prev = NULL;
-	current_n->n = n;
-	if (!h || !(*h))
-		*h = current_n;
+	current_n = NULL;
+	if (idx == 0)
+		current_n = add_dnodeint(h, n);
 	else
 	{
-		sub = *h;
-		while (idx != k++ && sub->next)
-			sub = sub->next;
-		if (sub->next)
-			current_n->prev = sub->prev;
-		else
-			current_n->prev = sub;
-		if (idx == k)
-			sub->next = current_n, current_n->prev = sub;
-		else if (idx == k - 1)
+		head = *h;
+		i = 1;
+		if (head != NULL)
+			while (head->prev != NULL)
+				head = head->prev;
+		while (head != NULL)
 		{
-			if (sub->prev)
-				sub->prev->next = current_n;
-			else
-				*h = current_n;
-			sub->prev = current_n;
-			current_n->next = sub;
-		}
-		else
-		{
-			free(current_n);
-			return (NULL);
+			if (i == idx)
+			{
+				if (head->next == NULL)
+					current_n = add_dnodeint_end(h, n);
+				else
+				{
+					current_n = malloc(sizeof(dlistint_t));
+					if (current_n != NULL)
+					{
+						current_n->n = n;
+						current_n->next = head->next;
+						current_n->prev = head;
+						head->next->prev = current_n;
+						head->next = current_n;
+					}
+				}
+				break;
+			}
+			head = head->next;
+			i++;
 		}
 	}
+
 	return (current_n);
 }
